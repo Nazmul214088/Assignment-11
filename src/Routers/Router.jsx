@@ -1,8 +1,6 @@
 import { createBrowserRouter } from "react-router";
 import RootLayout from "../Layouts/RootLayout";
 import Home from "../Pages/Home/Home";
-import Register from "../Pages/Register";
-import Login from "../Pages/Login";
 import DashboardLayout from "../Layouts/DashboardLayout";
 import AllBooks from "../Pages/AllBooks/AllBooks";
 import MyOrder from "../Pages/UserPages/MyOrder/MyOrder";
@@ -17,6 +15,8 @@ import AdminProfile from "../Pages/AdminPages/AdminProfile";
 import PaymentSuccess from "../Pages/UserPages/MyOrder/PaymentSuccess";
 import PaymentCancel from "../Pages/UserPages/MyOrder/PaymentCancel";
 import BookDetails from "../Components/BookDetails";
+import Login from "../Pages/Authpages/Login";
+import Register from "../Pages/Authpages/Register";
 
 export const router = createBrowserRouter([
   {
