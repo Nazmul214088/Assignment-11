@@ -1,12 +1,12 @@
 import { FcGoogle } from "react-icons/fc";
 import { Link, useNavigate } from "react-router";
-import loginImg from "../assets/login.png";
+import loginImg from "../../assets/login.png";
 import { useForm } from "react-hook-form";
 import { use, useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import { AuthContext } from "../Context/AuthContext";
 import Swal from "sweetalert2";
-import useAxios from "../Hooks/useAxios";
+import { AuthContext } from "../../Context/AuthContext";
+import useAxios from "../../Hooks/useAxios";
 
 const Login = () => {
   const [eye, setEye] = useState(false);
