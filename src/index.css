@@ -1,0 +1,13 @@
+@import "tailwindcss";
+@plugin "daisyui" {
+  themes: light --default;
+}
+
+
+.active {
+  color: #ffffff;
+  background: linear-gradient(to right, #4f46e5, #9333ea);
+  transition: 1s;
+}
+
+@custom-variant dark (&:where(.dark, .dark *));
