@@ -38,7 +38,6 @@ const NavBar = () => {
   };
 
   //theme toggle system theme
-
   return (
     <div className="navbar bg-base-100 shadow-sm dark:bg-[#2f3542] dark:text-white">
       <div className="navbar-start">
@@ -77,7 +76,7 @@ const NavBar = () => {
               <li className="h-10">
                 <img
                   className="h-12 w-12 rounded-full object-cover bg-center"
-                  src={user?.photoURL}
+                  src={user.photoURL}
                 />
               </li>
               <li>
