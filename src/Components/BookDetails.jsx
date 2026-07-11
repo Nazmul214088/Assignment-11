@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import useAxios from "../Hooks/useAxios";
 import Swal from "sweetalert2";
 import RelatedBooks from "../Pages/Home/RelatedBooks";
+import CustomerReview from "./CustomerReview";
 const BookDetails = () => {
   const [book, setBook] = useState();
 
@@ -72,7 +73,7 @@ const BookDetails = () => {
       <p className="flex justify-center items-center h-screen">Loading . . .</p>
     );
   }
-  console.log(book.bookCategory);
+  console.log(book);
 
   return (
     <div className=" border border-[#3333] rounded-xl shadow-lg my-8 py-6 w-[96%] mx-auto px-[6%]">
@@ -137,7 +138,7 @@ const BookDetails = () => {
 
       <h2 className="text-3xl font-semibold mt-8">Description:</h2>
       <p className="text-justify mb-8">{book?.bookDescription}</p>
-      <h2 className="text-3xl font-semibold">Customer Reviews:</h2>
+      <CustomerReview bookId={book._id} />
       <RelatedBooks bookCategory={book.bookCategory} />
 
       <p className="text-center text-[#33333375] pt-4">
