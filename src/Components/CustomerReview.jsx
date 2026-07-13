@@ -9,7 +9,7 @@ import ProgressBar from "./ProgressBar";
 const CustomerReview = ({ bookId }) => {
   const [stars, setStars] = useState(0);
   const [reviews, setReviews] = useState([]);
-  const [selectStars, setSelectStars] = useState(0);
+  const [selectStars, setSelectStars] = useState(1);
   const axiosSecure = useAxios();
   const { register, handleSubmit, reset } = useForm();
   useEffect(() => {
@@ -19,26 +19,7 @@ const CustomerReview = ({ bookId }) => {
     };
     getReviews();
   }, [axiosSecure, bookId]);
-  const handleSubmitCustomerReview = (data) => {
-    data.rating = selectStars;
-    data.bookId = bookId;
-    data.reviewAt = new Date();
-    axiosSecure.post("/reviews", data).then((res) => {
-      console.log(res.data);
-      if (res.data.insertedId) {
-        reset();
-        setSelectStars(0);
-        setReviews([...reviews, data]);
-        Swal.fire({
-          position: "top-center",
-          icon: "success",
-          title: "Thank you! Your review has been submitted successfully.",
-          showConfirmButton: false,
-          timer: 1500,
-        });
-      }
-    });
-  };
+
   const ratingCounts = [0, 0, 0, 0, 0];
   reviews.map((review) => {
     if (review.rating === 5) {
@@ -53,8 +34,9 @@ const CustomerReview = ({ bookId }) => {
       ratingCounts[4] += 1;
     }
   });
-  const ratingPercentages = ratingCounts.map(
-    (count) => (count / reviews.length) * 100,
+
+  const ratingPercentages = ratingCounts.map((count) =>
+    count === 0 ? 0 : (count / reviews.length) * 100,
   );
   const ratings = () => {
     let totalReviews = 0;
@@ -66,6 +48,36 @@ const CustomerReview = ({ bookId }) => {
     }
     return (totalReviews / reviews.length).toFixed(2);
   };
+  const averageRating = ratings();
+
+  const handleSubmitCustomerReview = (data) => {
+    data.rating = selectStars;
+    data.bookId = bookId;
+    data.reviewAt = new Date();
+    axiosSecure.post("/reviews", data).then((res) => {
+      if (res.data.insertedId) {
+        reset();
+        setSelectStars(0);
+        setReviews([...reviews, data]);
+        Swal.fire({
+          icon: "success",
+          title: "Thank you! Your review has been submitted successfully.",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      }
+    });
+  };
+  useEffect(() => {
+    const updateReviews = {
+      averageRating,
+      totalReviews: reviews.length,
+    };
+
+    axiosSecure.patch(`/books/${bookId}`, updateReviews).then((res) => {
+      console.log(res.data);
+    });
+  }, [averageRating, axiosSecure, bookId, reviews.length]);
   const timeAgo = (date) => {
     const now = new Date();
     const past = new Date(date);
@@ -93,20 +105,22 @@ const CustomerReview = ({ bookId }) => {
       <div className="grid lg:grid-cols-3 py-4 gap-8 mb-10 items-center border border-black/10 rounded-lg">
         <div className="p-6">
           <h3 className="text-2xl font-semibold">Total Reviews</h3>
-          <h2 className="text-4xl font-bold py-2">{reviews.length}</h2>
+          <h2 className="text-4xl font-bold py-2">
+            {reviews.length > 0 ? reviews.length : 0}
+          </h2>
           <p className="text-black/50">Growth in reviews on this years</p>
         </div>
         <div className="p-6 border-x border-black/20">
           <h3 className="text-2xl font-semibold">Average Rating</h3>
           <div className="text-2xl font-bold py-2 flex gap-2 items-center">
-            <h2>{ratings()}</h2>
-            <Stars rating={ratings()} />
+            <h2>{reviews.length > 0 ? averageRating : "0.00"}</h2>
+            <Stars rating={reviews.length > 0 ? averageRating : 0} />
           </div>
           <p className="text-black/50">Growth in reviews on this years</p>
         </div>
         <div className="p-6">
           {ratingPercentages.map((count, i) => (
-            <div className="flex ">
+            <div className="flex " key={i}>
               <p className="w-15 font-semibold text-[#002472]">{5 - i} star</p>
               <ProgressBar progress={count} />
               <p className="w-10 text-right text-[#00133b]">

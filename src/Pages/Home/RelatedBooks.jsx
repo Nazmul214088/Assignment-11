@@ -3,7 +3,6 @@ import useAxios from "../../Hooks/useAxios";
 import BookCard from "./BookCard";
 
 const RelatedBooks = ({ bookCategory }) => {
-  console.log(bookCategory);
   const axiosSecure = useAxios();
   const [relatedBooks, setRelatedBooks] = useState([]);
   useEffect(() => {

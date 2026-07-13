@@ -6,6 +6,8 @@ import useAxios from "../Hooks/useAxios";
 import Swal from "sweetalert2";
 import RelatedBooks from "../Pages/Home/RelatedBooks";
 import CustomerReview from "./CustomerReview";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { FaCheck } from "react-icons/fa";
 const BookDetails = () => {
   const [book, setBook] = useState();
 
@@ -13,6 +15,7 @@ const BookDetails = () => {
   const { user } = useAuth();
   const orderBtnModalRef = useRef();
   const axiosSecure = useAxios();
+  const queryClient = useQueryClient();
 
   const {
     reset,
@@ -34,10 +37,19 @@ const BookDetails = () => {
     };
     getBook();
   }, [axiosSecure, _id]);
+  const { data: wishlist = [] } = useQuery({
+    queryKey: ["wishlist", user?.email],
+    queryFn: async () => {
+      const res = await axiosSecure.get(
+        `/wishlist?userEmail=${user.email}&bookId=${_id}`,
+      );
+      return res.data;
+    },
+  });
+
   const showModalBtn = () => {
     orderBtnModalRef.current.showModal();
   };
-  console.log(book);
 
   const handlePlaceOrder = async (data) => {
     data.bookName = book.bookTitle;
@@ -73,7 +85,35 @@ const BookDetails = () => {
       <p className="flex justify-center items-center h-screen">Loading . . .</p>
     );
   }
-  console.log(book);
+
+  const handleAddToWishlistBtn = (book) => {
+    const addWishlist = {
+      bookId: book._id,
+      bookImage: book.bookImage,
+      bookTitle: book.bookTitle,
+      bookAuthor: book.authorName,
+      bookCategory: book.bookCategory,
+      price: book.price,
+      userEmail: user.email,
+      averageRating: book.averageRating || 0,
+      totalReviews: book.totalReviews || 0,
+    };
+
+    axiosSecure.post("/wishlist", addWishlist).then((res) => {
+      if (res.data.insertedId) {
+        Swal.fire({
+          position: "top-center",
+          icon: "success",
+          title: "Added your wishlist.",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        queryClient.invalidateQueries({
+          queryKey: ["wishlist", user?.email],
+        });
+      }
+    });
+  };
 
   return (
     <div className=" border border-[#3333] rounded-xl shadow-lg my-8 py-6 w-[96%] mx-auto px-[6%]">
@@ -96,15 +136,17 @@ const BookDetails = () => {
               <p className="text-lg">Language: {book?.language}</p>
 
               <p className="text-xl">
-                Rating: <span className="font-bold ">4.6</span>
+                Rating: <span className="font-bold ">{book.averageRating}</span>
               </p>
             </div>
           </div>
           <div className="flex justify-between py-2 border-y my-2 border-[#3333]">
             <div>
-              <p className="text-xl font-bold">Category: {book?.category}</p>
+              <p className="text-xl font-bold">
+                Category: {book?.bookCategory}
+              </p>
               <p className="text-xl font-semibold">
-                Available Copies: {book?.availableCopies}
+                Available Copies: {book?.copies}
               </p>
             </div>
             <div>
@@ -119,19 +161,34 @@ const BookDetails = () => {
             </div>
           </div>
 
-          <div className="flex justify-between">
-            <button
-              onClick={() => showModalBtn(book)}
-              className="btn btn-primary hover:from-[#902001] hover:to-[#001269] transition duration-500"
-            >
-              Order Now
-            </button>
+          <div className="flex justify-end">
             <p className="text-xl flex gap-4">
               <span>total Cost:</span>
               <span className="font-semibold">
                 {Number(book?.price) + Number(book?.deliveryCharge)}
               </span>
             </p>
+          </div>
+          <div className="flex justify-between mt-10">
+            {!wishlist.isWishListed ? (
+              <button
+                onClick={() => handleAddToWishlistBtn(book)}
+                className="btn"
+              >
+                Add to Wishlist
+              </button>
+            ) : (
+              <p className="border border-black/10 py-2 px-6 rounded-md flex gap-1 items-center text-black/60 font-semibold">
+                <FaCheck className="text-[#0716e9]" />
+                <span>Added to Wishlist</span>
+              </p>
+            )}
+            <button
+              onClick={() => showModalBtn(book)}
+              className="btn btn-primary hover:from-[#902001] hover:to-[#001269] transition duration-500"
+            >
+              Order Now
+            </button>
           </div>
         </div>
       </div>
@@ -142,8 +199,8 @@ const BookDetails = () => {
       <RelatedBooks bookCategory={book.bookCategory} />
 
       <p className="text-center text-[#33333375] pt-4">
-        Added Date: {new Date(book.createAt).toLocaleDateString()},
-        {new Date(book?.createAt).toLocaleTimeString()}
+        Added Date: {new Date(book.createdAt).toLocaleDateString()},
+        {new Date(book?.createdAt).toLocaleTimeString()}
       </p>
 
       {/* modal */}

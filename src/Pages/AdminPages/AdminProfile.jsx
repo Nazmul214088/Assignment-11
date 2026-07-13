@@ -90,7 +90,6 @@ const MyProfile = () => {
       } else {
         data.photoURL = currentUserData.photoURL; // keep existing
       }
-      console.log(data);
       // Update Display Name and photoUrl
       const displayName = `${data.firstName} ${data.lastName}`;
       if (

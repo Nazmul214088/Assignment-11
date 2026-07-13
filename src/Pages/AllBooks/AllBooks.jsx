@@ -61,7 +61,7 @@ const AllBooks = () => {
           <option value="price-desc">Price(High{">"}Low)</option>
         </select>
       </div>
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4 mb-8">
+      <div className="grid lg:grid-cols-2 gap-4 mt-4 mb-8">
         {allBooks.length > 0 ? (
           allBooks.map((book, index) => <BookCard book={book} key={index} />)
         ) : (

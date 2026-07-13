@@ -28,17 +28,21 @@ const BookCard = ({ book }) => {
       <div className="px-8 pb-6">
         <div className="flex justify-between py-2 border-y mb-6 border-[#3333]">
           <div>
-            <p className="text-xl font-bold">Category: {book.category}</p>
+            <p className="text-xl font-bold">Category: {book.bookCategory}</p>
             <p className="text-xl font-semibold">
-              Available Copies: {book.availableCopies}
+              <span>Available Copies:</span> {book.copies}
             </p>
           </div>
           <div>
-            <p className="text-xl">
-              Price: <span className="font-bold">{book.price}</span>
+            <p className="text-xl flex justify-between">
+              <span>Price:</span>{" "}
+              <span className="font-bold">{book.price}</span>
             </p>
-            <p className="text-xl">
-              Rating: <span className="font-bold">{book.rating}</span>
+            <p className="text-xl flex justify-between gap-2">
+              <span>Rating: </span>
+              <span className="font-bold">
+                {isNaN(book.averageRating) ? 0 : book.averageRating}
+              </span>
             </p>
           </div>
         </div>
@@ -52,8 +56,8 @@ const BookCard = ({ book }) => {
           </Link>
         </div>
         <p className="text-center text-[#33333375] pt-4">
-          Added Date: {new Date(book.createAt).toLocaleDateString()},
-          {new Date(book.createAt).toLocaleTimeString()}
+          Added Date: {new Date(book.createdAt).toLocaleDateString()},
+          {new Date(book.createdAt).toLocaleTimeString()}
         </p>
       </div>
     </div>

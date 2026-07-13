@@ -13,6 +13,7 @@ import { TbBooks, TbLayoutSidebarLeftExpand } from "react-icons/tb";
 import { Link, NavLink, Outlet } from "react-router";
 import logo from "../assets/logo.png";
 import useRole from "../Hooks/useRole";
+import { HiOutlineHeart } from "react-icons/hi";
 
 const DashboardLayout = () => {
   const role = useRole();
@@ -47,6 +48,16 @@ const DashboardLayout = () => {
         >
           <FaFileInvoiceDollar />
           <span className="is-drawer-close:hidden">Invoice</span>
+        </NavLink>
+      </li>
+      <li>
+        <NavLink
+          to={"/dashboard/user/my-wishlist"}
+          className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+          data-tip="My Wishlist"
+        >
+          <HiOutlineHeart />
+          <span className="is-drawer-close:hidden">My Wishlist</span>
         </NavLink>
       </li>
     </>

@@ -17,6 +17,7 @@ import PaymentCancel from "../Pages/UserPages/MyOrder/PaymentCancel";
 import BookDetails from "../Components/BookDetails";
 import Login from "../Pages/Authpages/Login";
 import Register from "../Pages/Authpages/Register";
+import MyWishlist from "../Pages/UserPages/MyWishlist/MyWishlist";
 
 export const router = createBrowserRouter([
   {
@@ -65,6 +66,10 @@ export const router = createBrowserRouter([
       {
         path: "user/invoice",
         Component: Invoices,
+      },
+      {
+        path: "user/my-wishlist",
+        Component: MyWishlist,
       },
 
       //Librarian Links
