@@ -16,20 +16,35 @@ const MyOrder = () => {
     };
     getOrders();
   }, [user, axiosSecure]);
-  const handleCancelOrder = async (id) => {
+  const handleCancelOrder = async (id, bookId) => {
+    console.log(id);
+    console.log(bookId);
+
     const result = await axiosSecure.patch(`/orders/${id}`);
-    if (result.data.matchedCount > 0) {
+    if (result.data.modifiedCount > 0) {
       const updateOrders = myOrders.map((order) =>
         order._id === id ? { ...order, status: "cancelled" } : order,
       );
       setMyOrders(updateOrders);
-      Swal.fire({
-        position: "top-center",
-        icon: "success",
-        title: "Your order has been deleted.",
-        showConfirmButton: false,
-        timer: 1500,
-      });
+
+      const getBook = await axiosSecure.get(`/books/${bookId}`);
+      const updateCopies = {
+        copies: getBook.copies + 1,
+      };
+
+      const updateBookResponse = await axiosSecure.patch(
+        `/books/${bookId}`,
+        updateCopies,
+      );
+      if (updateBookResponse.data.modifiedCount > 0) {
+        Swal.fire({
+          position: "top-center",
+          icon: "success",
+          title: "Your order has been deleted.",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      }
     }
   };
 
@@ -78,7 +93,6 @@ const MyOrder = () => {
                       book.status === "cancelled"
                         ? "text-red-600 font-semibold"
                         : ""
-                      
                     }
                   >
                     {book.status}
@@ -87,7 +101,9 @@ const MyOrder = () => {
                     {book.status === "pending" && (
                       <>
                         <button
-                          onClick={() => handleCancelOrder(book._id)}
+                          onClick={() =>
+                            handleCancelOrder(book._id, book.bookId)
+                          }
                           className="py-2 px-6 text-white font-semibold tabs-xl bg-red-600 border border-black/20 rounded-xl cursor-pointer mr-4"
                         >
                           Cancel

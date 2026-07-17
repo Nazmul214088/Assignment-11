@@ -24,6 +24,8 @@ const AddBook = () => {
   };
   const handleAddBookBtn = async (data) => {
     data.librarianEmail = user.email;
+    data.averageRating = 0;
+    data.totalReviews=0;
     const img = data.bookImage[0];
     const formData = new FormData();
     formData.append("image", img);
@@ -126,11 +128,12 @@ const AddBook = () => {
           <select {...register("bookCategory")} className="input w-full">
             <option value="">Select Book Category</option>
 
-            <option value="Programming">Programming</option>
-            <option value="Novel">Novel</option>
+            <option value="Islamic">Islamic</option>
+            <option value="Faction">Faction</option>
+            <option value="CSE">CSE</option>
             <option value="Science">Science</option>
-            <option value="History">History</option>
-            <option value="Biography">Biography</option>
+            <option value="Self_Help">Self Help</option>
+            <option value="Novel">Novel</option>
           </select>
 
           {/* Book description */}

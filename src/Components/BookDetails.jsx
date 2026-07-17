@@ -65,6 +65,17 @@ const BookDetails = () => {
           showConfirmButton: false,
           timer: 1500,
         });
+        const updateData = {
+          copies: book.copies - 1,
+        };
+        axiosSecure.patch(`/books/${book._id}`, updateData).then((res) => {
+          if (res.data.modifiedCount > 0) {
+            setBook((prev) => ({
+              ...prev,
+              copies: book.copies - 1,
+            }));
+          }
+        });
         reset();
         orderBtnModalRef.current.close();
       } else {
@@ -183,12 +194,18 @@ const BookDetails = () => {
                 <span>Added to Wishlist</span>
               </p>
             )}
-            <button
-              onClick={() => showModalBtn(book)}
-              className="btn btn-primary hover:from-[#902001] hover:to-[#001269] transition duration-500"
-            >
-              Order Now
-            </button>
+            {book?.copies <= 0 ? (
+              <p className="border border-black/20 py-2 px-6 rounded-md text-lg text-red-600/70 font-bold ">
+                Out of Stock
+              </p>
+            ) : (
+              <button
+                onClick={() => showModalBtn(book)}
+                className="border border-black/20 rounded-md text-lg font-semibold bg-green-500 text-white px-8 py-2"
+              >
+                Order Now
+              </button>
+            )}
           </div>
         </div>
       </div>

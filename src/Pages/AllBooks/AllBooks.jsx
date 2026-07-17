@@ -3,18 +3,27 @@ import useAxios from "../../Hooks/useAxios";
 import BookCard from "../Home/BookCard";
 import { FaSearch } from "react-icons/fa";
 import { useForm } from "react-hook-form";
-
+import { useSearchParams } from "react-router";
 const AllBooks = () => {
   const [allBooks, setAllBooks] = useState([]);
   const axiosSecure = useAxios();
+  const [searchParams] = useSearchParams();
+
+  const category = searchParams.get("category");
+  console.log(category);
   const { register, handleSubmit } = useForm();
   useEffect(() => {
     const getBooks = async () => {
-      const res = await axiosSecure.get("/books");
-      setAllBooks(res.data);
+      if (category) {
+        const res = await axiosSecure.get(`/books?bookCategory=${category}`);
+        setAllBooks(res.data);
+      } else {
+        const res = await axiosSecure.get("/books");
+        setAllBooks(res.data);
+      }
     };
     getBooks();
-  }, [axiosSecure]);
+  }, [axiosSecure, category]);
   const handleSearchBookBtn = (data) => {
     console.log(data);
     const filterData = allBooks.filter((book) =>

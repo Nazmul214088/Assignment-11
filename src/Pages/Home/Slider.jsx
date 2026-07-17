@@ -10,7 +10,6 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Link } from "react-router";
 
 const Slider = ({ latestBooks }) => {
-  console.log(latestBooks);
   return (
     <Swiper
       loop={true}

@@ -56,10 +56,6 @@ const ChooseBookCourier = () => {
           </div>
         ))}
       </div>
-      {/* 📖 10,000+ Books Available
-👥 5,000+ Happy Readers
-🚚 Delivery Across Bangladesh
-⭐ 4.9 Average Rating */}
     </div>
   );
 };

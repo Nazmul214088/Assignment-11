@@ -4,6 +4,8 @@ import Coverage from "./Coverage";
 import LatestBooks from "./LatestBooks";
 import Slider from "./Slider";
 import useAxios from "../../Hooks/useAxios";
+import TestimonialsAndStatistics from "./TestimonialsAndStatistics";
+import Categories from "./Categories";
 
 const Home = () => {
   const [latestBooks, setLatestBooks] = useState([]);
@@ -22,6 +24,8 @@ const Home = () => {
       <LatestBooks latestBooks={latestBooks} />
       <Coverage />
       <ChooseBookCourier />
+      <Categories />
+      <TestimonialsAndStatistics />
     </div>
   );
 };
