@@ -19,14 +19,14 @@ const BookCard = ({ book }) => {
           <h2 className="text-4xl font-bold bg-linear-to-r from-[#00188e] to-[#900101] bg-clip-text text-transparent">
             Title: {book.bookTitle}
           </h2>
-          <p className="text-xl font-semibold">Author: {book.authorName}</p>
+          <p className="text-xl italic">Author: {book.authorName}</p>
           <h3 className="text-xl py-2 font-semibold">
             Library Name: {book.libraryName}
           </h3>
         </div>
       </div>
       <div className="px-8 pb-6">
-        <div className="flex justify-between py-2 border-y mb-6 border-[#3333]">
+        <div className="sm:flex justify-between py-2 border-y mb-6 border-[#3333]">
           <div>
             <p className="text-xl font-bold">Category: {book.bookCategory}</p>
             <p className="text-xl font-semibold">
